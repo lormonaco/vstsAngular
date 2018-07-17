@@ -1,5 +1,5 @@
-<h1>work item list</h1>
-<ul>
+<h2>work item list</h2>
+<!--<ul>
     <li *ngFor="let wi of workItems"> 
         id: {{wi.id}} <br/> 
         title : {{wi.title}}<br/>
@@ -7,4 +7,25 @@
         original estimate: {{wi.originalEstimate}} <br/>
         completed:{{wi.completed}} <br/>
         assigned to: {{wi.assignedTo}}  </li>
-</ul>
+</ul>-->
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Version</th>
+            <th>Original Estimate ( hours )</th>
+            <th>Completed ( hours )</th>
+            <th>Assigned to</th>
+        </tr>
+        <tr *ngFor="let wi of workItems">
+            <td>{{wi.id}} </td>
+            <td> {{wi.title}}</td>
+            <td>{{wi.version}}</td>
+            <td>{{wi.originalEstimate}}</td>
+            <td>{{wi.completed}}</td>
+            <td>{{wi.assignedTo}} </td>
+        </tr>
+    </thead>
+</table>
