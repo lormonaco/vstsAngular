@@ -7,21 +7,25 @@ import { WorkItemService } from '../service/workItem.service';
     selector: 'app-vsts',
     //template: '<h2>Report VSTS</h2>',
     templateUrl: '../view/work_items.html',
-    providers: [WorkItemService]
+    providers: [WorkItemService],
+
+    
 
 })
 
 export class VstsComp implements OnInit {
-    public workItems: any;
+    public workItems: any = [];
     constructor(private _vsts: WorkItemService) {
 
     }
 
-    getWorkItems() {
-        this.workItems = this._vsts.getWorkItems();
+    getWorkItemsFromMock() {
+        this.workItems = this._vsts.getWorkItems(true);
         console.log(this.workItems);
     }
-    ngOnInit(){
-        this.getWorkItems();
+
+
+    ngOnInit() {
+        this.getWorkItemsFromMock();
     }
 }

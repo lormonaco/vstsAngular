@@ -1,3 +1,10 @@
+<h1>work item list</h1>
 <ul>
-    <li *ngfor="let wi of workItems">{{wi.title}}</li>
+    <li *ngFor="let wi of workItems"> 
+        id: {{wi.id}} <br/> 
+        title : {{wi.title}}<br/>
+        version: {{wi.version}}<br/>
+        original estimate: {{wi.originalEstimate}} <br/>
+        completed:{{wi.completed}} <br/>
+        assigned to: {{wi.assignedTo}}  </li>
 </ul>

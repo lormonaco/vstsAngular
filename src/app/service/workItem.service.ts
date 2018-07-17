@@ -5,7 +5,10 @@ import { WORKITEMS } from './mock.vsts';
 
 export class WorkItemService {
 
-    getWorkItems() {
+    /* if simulate, returns the mock data
+    otherwise, connect to VSTS */
+    getWorkItems(simulate) {
+      if(simulate)
         return WORKITEMS;
     }
 
