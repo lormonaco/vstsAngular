@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { WorkItemService } from '../service/workItem.service';
 import { IWorkItem } from '../shared/interface/workitem.interface';
+import { commons, EffortCriticity } from '../shared/commons';
 
 @Component({
     selector: 'app-vsts',
-    //template: '<h2>Report VSTS</h2>',
     templateUrl: '../view/work_items.html',
     providers: [WorkItemService],
 
@@ -31,14 +31,14 @@ export class VstsComp implements OnInit, OnDestroy {
                 this.wiConnection = this._vsts.getWorkItemByUrl(wi['url']).subscribe((result) => {
 
                     let tempWi: IWorkItem = {};
-                    console.log(result);
                     tempWi.id = result['id'];
                     tempWi.title = result['fields']['System.Title'];
                     tempWi.version = result['fields']['System.IterationPath'].substring(32);
                     tempWi.originalEstimate = result['fields']['Microsoft.VSTS.Scheduling.OriginalEstimate'];
-                    tempWi.completed = '10';
+                    tempWi.completed = result['fields']['Microsoft.VSTS.Scheduling.CompletedWork'];
                     tempWi.assignedTo = result['fields']['System.AssignedTo']
-
+                    // if the completed requires more than 2 times of the original effort, the status is critical
+                    tempWi.critical = tempWi.originalEstimate < tempWi.completed / 2 ? EffortCriticity.Danger.toString() : tempWi.originalEstimate < tempWi.completed ? EffortCriticity.Warning : EffortCriticity.Success.toString();
                     this.workItems.push(tempWi);
                 });
             })

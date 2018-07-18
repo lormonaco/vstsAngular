@@ -2,7 +2,8 @@ export interface IWorkItem {
     id?: string;
     title?: string;
     version?: string;
-    originalEstimate?: string;
-    completed?: string;
+    originalEstimate?: number;
+    completed?: number;
     assignedTo?: string;
+    critical?: string;
 }

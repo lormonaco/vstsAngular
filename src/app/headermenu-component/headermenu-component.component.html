@@ -1,0 +1,19 @@
+<div>
+
+
+  <form>
+    <div class="form-group">
+      <label for="sel1">Select list (select one):</label>
+      <select [ngModel]="selectedCritical"  class="form-control" (ngModelChange)="onChange($event)" name="sel2">
+        <option>All</option>
+        <option>Issue</option>
+        <option>Ok</option>
+      </select>
+
+
+     
+
+    </div>
+  </form>
+
+</div>
