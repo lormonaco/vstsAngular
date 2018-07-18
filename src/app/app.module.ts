@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { VstsComp} from './vsts-component/vsts.component';
+import { VstsComp } from './vsts-component/vsts.component';
 import { HeadermenuComponentComponent } from './headermenu-component/headermenu-component.component';
+import { HttpClientModule } from '@angular/common/http'
 
 
 
@@ -12,12 +13,14 @@ import { HeadermenuComponentComponent } from './headermenu-component/headermenu-
   declarations: [
     AppComponent,
     VstsComp,
-    
+    HeadermenuComponentComponent
+
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    HttpClientModule
 
   ],
   providers: [],
