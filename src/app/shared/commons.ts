@@ -4,7 +4,8 @@ export const commons = {
 }
 
 export enum EffortCriticity {
-    Success = "success",
-    Warning = "warning",
-    Danger = "danger"
+    correct = "correct",
+    notCorrect = "notCorrect",
+    exPessimistic = "extremelyPessimistic",
+    exOptimistic = "extremelyOptimistic"
 }

@@ -18,6 +18,7 @@ export class VstsComp implements OnInit, OnDestroy {
     private vstsConnection: any;
     private wiConnection: any;
     constructor(private _vsts: WorkItemService) { }
+    allWorkItems: IWorkItem[] = [];
 
 
 
@@ -38,15 +39,40 @@ export class VstsComp implements OnInit, OnDestroy {
                     tempWi.completed = result['fields']['Microsoft.VSTS.Scheduling.CompletedWork'];
                     tempWi.assignedTo = result['fields']['System.AssignedTo']
                     // if the completed requires more than 2 times of the original effort, the status is critical
-                    tempWi.critical = tempWi.originalEstimate < tempWi.completed / 2 ? EffortCriticity.Danger.toString() : tempWi.originalEstimate < tempWi.completed ? EffortCriticity.Warning : EffortCriticity.Success.toString();
+
+                    if (tempWi.originalEstimate < tempWi.completed / 2)
+                        tempWi.critical = EffortCriticity.exOptimistic;
+                    else if (tempWi.completed < tempWi.originalEstimate / 2)
+                        tempWi.critical = EffortCriticity.exPessimistic;
+                    else if (tempWi.originalEstimate < tempWi.completed)
+                        tempWi.critical = EffortCriticity.notCorrect;
+                    else tempWi.critical = EffortCriticity.correct;
+
                     this.workItems.push(tempWi);
                 });
             })
         })
+
+        this.allWorkItems = this.workItems;
     }
 
     ngOnDestroy() {
         this.vstsConnection.unsubscribe();
         this.wiConnection.unsubscribe();
     }
+
+    onChange(newValue) {
+        this.workItems = this.allWorkItems;
+        console.log(newValue);
+        if (newValue == "---") {
+            this.workItems = this.allWorkItems;
+        } else { 
+        var newResult = this.workItems.filter(function (el) {
+            return el.critical == newValue;
+        });
+        console.log(newValue);
+        //  console.log(newResult);
+        this.workItems = newResult;
+    }
+}
 }

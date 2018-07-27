@@ -1,7 +1,27 @@
-<h2>work item list</h2>
+<h2>GMES Productivity Effort Reporting</h2>
+<div>
 
 
-<table class="table table-condensed">
+        <form>
+          <div class="form-group">
+            <label for="sel1">Select list (select one):</label>
+            <select [ngModel]="selectedCritical" ng-model="searchtest.action" class="form-control" name="sel2"  (ngModelChange)="onChange($event)">
+                <option value="---" >---</option>
+                <option value="correct" >Estimation Correct</option>
+              <option value="notCorrect" >Estimation not correct</option>
+              <option value="extremelyOptimistic" >Estimation extremely Optimistic ( Danger!)</option>
+              <option value="extremelyPessimistic" >Estimation extremely Pessimistic</option>
+            </select>
+      
+       
+           
+      
+          </div>
+        </form>
+      
+      </div>
+
+<table ng-init="searchText" class="table table-condensed" style="position: relative">
     <thead>
         <tr>
             <th>ID</th>
@@ -11,8 +31,9 @@
             <th>Completed ( hours )</th>
             <th>Assigned to</th>
         </tr>
-        <!--<tr *ngFor="let wi of workItems" [class] = "wi.critical == 'danger' ? 'danger':'success' " >-->
-        <tr *ngFor="let wi of workItems" [class]="wi.critical == 'danger' ? 'danger':wi.critical == 'success' ? 'success': 'warning' ">
+       
+    <!--<tr *ngFor="let wi of workItems  " [class]="wi.critical == 'exOptimistic' ? 'danger': wi.critical == 'correct' || wi.critical == 'exPessimistic'   ? 'success': 'warning' ">-->
+        <tr *ngFor="let wi of workItems  " [class]="wi.critical == 'extremelyOptimistic' ? 'danger': wi.critical == 'notCorrect' ? 'warning':'success' ">
             <td>{{wi.id}} </td>
             <td>{{wi.title}}</td>
             <td>{{wi.version}}</td>
@@ -22,3 +43,4 @@
         </tr>
     </thead>
 </table>
+

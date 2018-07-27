@@ -13,11 +13,7 @@ export class AppComponent {
   
 
   constructor() {
-    setTimeout(() => {
-      const NOME = 'Loaded'
-      this.title = NOME;
-    
-    }, 5000);
+   
   }
 
   getClick(event) {

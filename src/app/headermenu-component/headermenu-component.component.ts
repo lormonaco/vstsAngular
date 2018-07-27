@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { commons, EffortCriticity } from '../shared/commons';
+import { VstsComp } from '../vsts-component/vsts.component';
 
 @Component({
   selector: 'app-headermenu-component',
@@ -10,16 +11,17 @@ export class HeadermenuComponentComponent implements OnInit {
 
   selectedCritical: string;
   criticalValues;
-  constructor() { }
+  //vstsComponent = new VstsComp(1);
+constructor() { }
 
-  ngOnInit() {
-    
-  }
+ngOnInit() {
 
-  onChange(newValue) {
-    console.log(newValue);
-    this.selectedCritical = newValue;
-  }
+}
+
+onChange(newValue) {
+  console.log(newValue);
+  this.selectedCritical = newValue;
+}
 }
 
 
