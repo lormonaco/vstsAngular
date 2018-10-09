@@ -1,25 +1,33 @@
-<h2>GMES Productivity Effort Reporting</h2>
+<h2>
+
+    GMES Productivity Effort Dashboard</h2>
 <div>
 
 
-        <form>
-          <div class="form-group">
+    <form>
+        <div class="form-group">
             <label for="sel1">Select list (select one):</label>
-            <select [ngModel]="selectedCritical" ng-model="searchtest.action" class="form-control" name="sel2"  (ngModelChange)="onChange($event)">
-                <option value="---" >---</option>
-                <option value="correct" >Estimation Correct</option>
-              <option value="notCorrect" >Estimation not correct</option>
-              <option value="extremelyOptimistic" >Estimation extremely Optimistic ( Danger!)</option>
-              <option value="extremelyPessimistic" >Estimation extremely Pessimistic</option>
+            <select [ngModel]="selectedCritical"  class="form-control" name="sel2" (ngModelChange)="onChange($event)">
+                <option value="---">---</option>
+                <option value="correct">Estimation Correct</option>
+                <option value="notCorrect">Estimation not correct</option>
+                <option value="extremelyOptimistic">Estimation extremely Optimistic ( Danger!)</option>
+                <option value="extremelyPessimistic">Estimation extremely Pessimistic</option>
             </select>
-      
-       
+            
+            
            
-      
-          </div>
-        </form>
-      
-      </div>
+        <label for="sel1">Dashboard type</label>
+        <select [ngModel]="dashboardTypeValue"  class="form-control" name="dashboardType" (ngModelChange)="onDashboardTypeChange($event)">
+            <option value="---">---</option>
+            <option value="monitor">Monitor ( Remaining > 0)</option>
+            <option value="report">Report (No Remaining)</option>
+        </select>
+        <button type="button" class="btn btn-light" (click)="resetFilter()" > Reset Filter</button>
+    </div>
+    </form>
+
+</div>
 
 <table ng-init="searchText" class="table table-condensed" style="position: relative">
     <thead>
@@ -31,9 +39,8 @@
             <th>Completed ( hours )</th>
             <th>Assigned to</th>
         </tr>
-       
-    <!--<tr *ngFor="let wi of workItems  " [class]="wi.critical == 'exOptimistic' ? 'danger': wi.critical == 'correct' || wi.critical == 'exPessimistic'   ? 'success': 'warning' ">-->
-        <tr *ngFor="let wi of workItems  " [class]="wi.critical == 'extremelyOptimistic' ? 'danger': wi.critical == 'notCorrect' ? 'warning':'success' ">
+
+        <tr *ngFor="let wi of workItems " [class]="wi.critical == 'extremelyOptimistic' ? 'danger': wi.critical == 'notCorrect' ? 'warning':'success' ">
             <td>{{wi.id}} </td>
             <td>{{wi.title}}</td>
             <td>{{wi.version}}</td>
@@ -43,4 +50,3 @@
         </tr>
     </thead>
 </table>
-

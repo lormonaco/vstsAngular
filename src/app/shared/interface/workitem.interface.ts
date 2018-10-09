@@ -6,4 +6,5 @@ export interface IWorkItem {
     completed?: number;
     assignedTo?: string;
     critical?: string;
+    remainingWork?: number;
 }
