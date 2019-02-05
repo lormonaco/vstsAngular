@@ -20,8 +20,8 @@ export class VstsComp implements OnInit, OnDestroy {
     private wiConnection: any;
     constructor(private _vsts: WorkItemService) { }
     allWorkItems: IWorkItem[] = [];
-    private dashboardTypeValue: any = "---";
-    private selectedCritical:any = "---";
+     dashboardTypeValue: any = "---";
+     selectedCritical:any = "---";
 
     getSelectedCritical(){
         return this.selectedCritical;
@@ -35,18 +35,37 @@ export class VstsComp implements OnInit, OnDestroy {
 
         this.vstsConnection = this._vsts.callQueryEffortsDashboard().subscribe(data => {
             this.idList = data['workItems'];
+           
             this.idList.map((wi) => {
-
+               
+                var one_day=1000*60*60*24;
+                var one_hour=1000*60*60;
                 this.wiConnection = this._vsts.getWorkItemByUrl(wi['url']).subscribe((result) => {
 
                     let tempWi: IWorkItem = {};
+                   
                     tempWi.id = result['id'];
                     tempWi.title = result['fields']['System.Title'];
                     tempWi.version = result['fields']['System.IterationPath'].substring(32);
                     tempWi.originalEstimate = result['fields']['Microsoft.VSTS.Scheduling.OriginalEstimate'];
                     tempWi.completed = result['fields']['Microsoft.VSTS.Scheduling.CompletedWork'];
-                    tempWi.assignedTo = result['fields']['System.AssignedTo']
+                    tempWi.assignedTo = result['fields']['System.AssignedTo']['displayName'];
                     tempWi.remainingWork = result['fields']['Microsoft.VSTS.Scheduling.RemainingWork'];
+                    tempWi.developmentStart = result['fields']['Custom.DevelopmentTimeTracker'].substring(0,16);
+                    if(!result['fields']['Custom.DevelopmentTimeTrackerEnd'] ){
+                        tempWi.developmentEnd = "";
+                    }
+                    else {tempWi.developmentEnd = result['fields']['Custom.DevelopmentTimeTrackerEnd'].substring(0,16); }
+                    tempWi.netDevTime = result['fields']['Microsoft.VSTS.Scheduling.CompletedWork'];
+                    tempWi.netEstimationDelta = tempWi.originalEstimate-tempWi.completed;
+
+                    var devStartTime = new Date(tempWi.developmentStart);
+                    var devEndTime =  !tempWi.developmentEnd ? new Date() :   new Date(tempWi.developmentEnd);
+                    
+                    tempWi.grossDevTime= Math.round((devEndTime.getTime()-devStartTime.getTime())/one_hour);
+
+                    
+
 
                     // if the completed requires more than 2 times of the original effort, the status is critical
 
@@ -74,69 +93,70 @@ export class VstsComp implements OnInit, OnDestroy {
         this.wiConnection.unsubscribe();
     }
 
-    onChange(newValue) {
-        this.selectedCritical = newValue;
-        console.log("dashboard type is "+ this.dashboardTypeValue);
-        console.log("selected critical is "+ this.selectedCritical);
-        
+    onChange(criticalFilter) {
+        this.dashboardTypeValue = criticalFilter;
+        var selectedCriticalvalue = this.selectedCritical; 
         this.workItems = this.allWorkItems;
         
-        
-        
-        if (newValue == "---") {
-            this.workItems = this.allWorkItems;
-        } else {
 
-            if(this.dashboardTypeValue == "monitor"){
+        
+      
+
+        if(this.dashboardTypeValue == "monitor"){
+                console.log();
                 var newResult = this.workItems.filter(function (el) {
-                    return el.critical == newValue && el.remainingWork > 0  ; 
+                    return el.critical == criticalFilter && el.remainingWork > 0  ; 
                 });
             }
 
             if(this.dashboardTypeValue == "report"){
+              
                 var newResult = this.workItems.filter(function (el) {
-                    return el.critical == newValue && el.remainingWork == 0  ; 
+                    return el.critical == criticalFilter && el.remainingWork == 0  ; 
                 });
             }
             else {
                 var newResult = this.workItems.filter(function (el) {
-                    return el.critical == newValue  ;
+                
+                    return el.critical == criticalFilter  ;
                 });
             }
             
             
             
             this.workItems = newResult;
-        }
+        
     }
 
     onDashboardTypeChange(newValue) {
         
         this.dashboardTypeValue = newValue;
-        console.log("dashboard type is "+ this.dashboardTypeValue);
-        console.log("selected critical is "+ this.selectedCritical);
         var selectedCriticalvalue = this.selectedCritical; 
         this.workItems = this.allWorkItems;
        
-
-        
         
         if (newValue == "monitor") {
+            
             var newResult = this.workItems.filter(function (el) {
-                
-                return (el.remainingWork > 0 && el.critical == selectedCriticalvalue);
+                return selectedCriticalvalue !="---" ?  (el.remainingWork > 0 && el.critical == selectedCriticalvalue):el.remainingWork>0;
             })
+            
             this.workItems = newResult;
         }
         else if (newValue == "report") {
+         
             var newResult = this.workItems.filter(function (el) {
-               
-                return (el.remainingWork == 0 && el.critical == selectedCriticalvalue);
+                return selectedCriticalvalue !="---" ?  (el.remainingWork == 0 && el.critical == selectedCriticalvalue) : el.remainingWork == 0;
             })
             this.workItems = newResult;
         }
         else {
-            this.workItems = this.allWorkItems;
+            
+            var newResult = this.workItems.filter(function (el) {
+                return selectedCriticalvalue !="---" ?  ( el.critical == selectedCriticalvalue) : this.workItems ;
+            })
+            this.workItems = newResult;
+            
         }
 
     }

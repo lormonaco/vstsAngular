@@ -4,7 +4,7 @@
 <div>
 
 
-    <form>
+   <form>
         <div class="form-group">
             <label for="sel1">Select list (select one):</label>
             <select [ngModel]="selectedCritical"  class="form-control" name="sel2" (ngModelChange)="onChange($event)">
@@ -35,9 +35,15 @@
             <th>ID</th>
             <th>Title</th>
             <th>Version</th>
-            <th>Original Estimate ( hours )</th>
-            <th>Completed ( hours )</th>
+            <th>Original Estimate ( hh )</th>
+            <th>Net Development Time ( hh )</th>
+            <th>Gross Development Time ( hh )</th>
+            <th>Net Estimation delta ( hh )</th>
             <th>Assigned to</th>
+            <th>Development Start</th>
+            <th>Development End</th>
+            <th>Remaining</th>
+            
         </tr>
 
         <tr *ngFor="let wi of workItems " [class]="wi.critical == 'extremelyOptimistic' ? 'danger': wi.critical == 'notCorrect' ? 'warning':'success' ">
@@ -45,8 +51,14 @@
             <td>{{wi.title}}</td>
             <td>{{wi.version}}</td>
             <td>{{wi.originalEstimate}}</td>
-            <td>{{wi.completed}}</td>
-            <td>{{wi.assignedTo}} </td>
+            <td>{{wi.netDevTime}}</td>
+            <td>{{wi.grossDevTime}}</td>
+            <td>{{wi.netEstimationDelta}}</td>
+            <td>{{wi.assignedTo}}</td>
+            <td>{{wi.developmentStart}}</td>
+            <td>{{wi.developmentEnd}}</td>
+            <td>{{wi.remainingWork}}</td>
+            
         </tr>
     </thead>
 </table>

@@ -7,4 +7,10 @@ export interface IWorkItem {
     assignedTo?: string;
     critical?: string;
     remainingWork?: number;
+    developmentStart?: string;
+    developmentEnd?: string;
+    netDevTime?: number;
+    grossDevTime?: number;
+    netEstimationDelta?: number;
+    grossEstimationDelta?: number;
 }
