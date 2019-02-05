@@ -62,8 +62,8 @@ export class VstsComp implements OnInit, OnDestroy {
                     var devStartTime = new Date(tempWi.developmentStart);
                     var devEndTime =  !tempWi.developmentEnd ? new Date() :   new Date(tempWi.developmentEnd);
                     
-                    tempWi.grossDevTime= Math.round((devEndTime.getTime()-devStartTime.getTime())/one_hour);
-
+                    //tempWi.grossDevTime= Math.round((devEndTime.getTime()-devStartTime.getTime())/one_hour);
+                    tempWi.grossDevTime =   this.workingHoursBetweenDates(devStartTime,devEndTime,9,17,false);
                     
 
 
@@ -100,8 +100,6 @@ export class VstsComp implements OnInit, OnDestroy {
         
 
         
-      
-
         if(this.dashboardTypeValue == "monitor"){
                 console.log();
                 var newResult = this.workItems.filter(function (el) {
@@ -167,5 +165,40 @@ export class VstsComp implements OnInit, OnDestroy {
         this.selectedCritical = "---";
         this.dashboardTypeValue = "---";
     }
+    // Simple function that accepts two parameters and calculates the number of hours worked 
+// within that range
+ workingHoursBetweenDates(startDate, endDate, dayStart, dayEnd, includeWeekends) {
+    // Store minutes worked
+    var minutesWorked = 0;
+  
+    // Validate input
+    if (endDate < startDate) { return 0; }
+    
+    // Loop from your Start to End dates (by hour)
+    var current = startDate;
+
+    // Define work range
+    var workHoursStart = dayStart;
+    var workHoursEnd = dayEnd;
+
+    // Loop while currentDate is less than end Date (by minutes)
+    while(current <= endDate){      
+        // Store the current time (with minutes adjusted)
+        var currentTime = current.getHours() + (current.getMinutes() / 60);
+             
+        // Is the current time within a work day (and if it occurs on a weekend or not)          
+        if(currentTime >= workHoursStart && currentTime < workHoursEnd && 
+            (includeWeekends ? current.getDay() !== 0 && current.getDay() !== 6 : true)){
+              minutesWorked++;
+        }
+         
+        // Increment current time
+        current.setTime(current.getTime() + 1000 * 60);
+    }
+
+    // Return the number of hours
+      // Return the number of hours
+      return Math.round(minutesWorked / 60 * 100) / 100;
+}
 
 }
